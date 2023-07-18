@@ -1,104 +1,95 @@
-import React,  {useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
 const GuessingGame = () => {
-    const [ guess, setGuess ] = useState("");
-    const [ message, setMessage ] = useState("Start Guessing");
-    const [ randomNumber, setRandomNumber ] = useState(null);
-    const [ timesGuessed, setTimesGuessed ] = useState(null);
+  const [guess, setGuess] = useState("");
+  const [message, setMessage] = useState("Start Guessing");
+  const [randomNumber, setRandomNumber] = useState(null);
+  const [timesGuessed, setTimesGuessed] = useState(null);
 
-    useEffect(() => {
-
-        if(randomNumber === null) {
-            setRandomNumber(
-                JSON.parse(localStorage.getItem("random"))   || generateNum()
-            )
-        }
-
-        if(timesGuessed === null) {
-            setTimesGuessed(
-                JSON.parse(localStorage.getItem("guesses")) || 0
-                );
-        }
-
-
-    }, [])
-
-    function generateNum() {
-        let random = Math.floor(Math.random() * 100);
-
-        localStorage.setItem("random", JSON.stringify(random));
-
-        return random;
+  useEffect(() => {
+    if (randomNumber === null) {
+      setRandomNumber(
+        JSON.parse(localStorage.getItem("random")) || generateNum()
+      );
     }
 
-    function handleSubmit(e) {
-        e.preventDefault();
+    if (timesGuessed === null) {
+      setTimesGuessed(JSON.parse(localStorage.getItem("guesses")) || 0);
+    }
+  }, []);
 
-        let parsedNum = parseInt(guess);
+  function generateNum() {
+    let random = Math.floor(Math.random() * 100);
 
-        if( parsedNum === randomNumber ) {
-            setMessage("You got me &#128513;")
-        } else if ( parsedNum > randomNumber ) {
-            setMessage("That's to high")
-        } else {
-            setMessage("That's to low")
-        }
+    localStorage.setItem("random", JSON.stringify(random));
 
-        setTimesGuessed(timesGuessed + 1);
-        localStorage.setItem("guesses", JSON.stringify(timesGuessed + 1));
-    }   
+    return random;
+  }
 
-    function handleChange(e) {
-        if(!isNaN(e.target.value)) {
-            setGuess(e.target.value);
-        } else {
-            alert("Sorry! It has to a number :)")
-        }
-        
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    let parsedNum = parseInt(guess);
+
+    if (parsedNum === randomNumber) {
+      setMessage("You got me! lol");
+    } else if (parsedNum > randomNumber) {
+      setMessage("That's to high");
+    } else {
+      setMessage("That's to low");
     }
 
-    function startOver() {
-        setGuess("");
-        setMessage("Start now!");
-        setTimesGuessed(0);
+    setTimesGuessed(timesGuessed + 1);
+    localStorage.setItem("guesses", JSON.stringify(timesGuessed + 1));
+  }
+
+  function handleChange(e) {
+    if (!isNaN(e.target.value)) {
+      setGuess(e.target.value);
+    } else {
+      alert("Sorry! It has to a number :)");
     }
+  }
 
+  function startOver() {
+    setGuess("");
+    setMessage("Start now!");
+    setTimesGuessed(0);
+    setRandomNumber(generateNum());
+    localStorage.removeItem("guesses");
+  }
 
-    return (
-        <>
-        <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3">
-                <Form.Label>I am thinking of a number between 1 and 100, Guess the lucky number!</Form.Label>
-                <Form.label>You have made {timesGuessed} guesses</Form.label>
-                <Form.Control
-                type="text"
-                value={guess}
-                name="guess"
-                onChange={handleChange}
-                />
-                <Button type="submit">Guess</Button>
-                <Form.Label>{message}</Form.Label>
-                <Button onClick={startOver} type="button">Start Over</Button>
-            </Form.Group>
-            <br/>
-        </Form>
+  console.log(randomNumber);
 
-        </>
-    )
-
-  
-    
-}
+  return (
+    <Form onSubmit={handleSubmit}>
+      <Form.Group className="mb-3">
+        <Form.Label>
+          I am thinking of a number between 1 and 100, Guess the lucky number!
+        </Form.Label>
+        <br />
+        <Form.Label>You have made {timesGuessed} guesses</Form.Label>
+        <Form.Control
+          type="text"
+          value={guess}
+          name="guess"
+          onChange={handleChange}
+        />
+        <Button type="submit">Guess</Button>
+        <br />
+        <br />
+        <Button onClick={startOver} type="button">
+          Start Over
+        </Button>
+        <br />
+        <br />
+        <Form.Label>{message}</Form.Label>
+      </Form.Group>
+      <br />
+    </Form>
+  );
+};
 
 export default GuessingGame;
-
-
-
-
-
-
-
-
-
