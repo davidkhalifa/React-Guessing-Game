@@ -71,10 +71,10 @@ const GuessingGame = () => {
       <Form className={styles.Form} onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label className={styles.FirstText}>
-            I am thinking of a number between 1 and 100. Guess the lucky number!
+            I'm thinking of a number between 1 and 100. Guess the lucky number!
           </Form.Label>
           <br />
-          <Form.Label>You have made {timesGuessed} guesses</Form.Label>
+          <Form.Label>You've made {timesGuessed} guesses</Form.Label>
           <Form.Control
             className="text-area"
             type="text"
